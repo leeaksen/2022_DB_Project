@@ -14,4 +14,4 @@
 
 ### E-R 다이어그램으로 표현
 E-R diagram
-![ERdiagram](ERdiagram.png"E-R diagram")
+![ERdiagram](./ERdiagram.png)
