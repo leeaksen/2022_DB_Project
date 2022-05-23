@@ -71,6 +71,7 @@
 19. 백신정보가 백신을 공급하면 공급처, 입고날짜, 입고수량 정보를 유지해야한다.
 
 ### 릴레이션 스키마
+#### 기본키는 ~~취소선~~으로 나타냈습니다.
 |릴레이션 이름|속성이름|속성이름|속성이름|속성이름|속성이름|속성이름|속성이름|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 |접종기록 릴레이션|~~접종환자아이디~~|접종자명|1차접종|2차접종|3차접종|감염전적|~~감염된환자아이디~~(외래키)|
@@ -79,3 +80,112 @@
 |증상 릴레이션|~~백신부작용증상~~|
 |백신 릴레이션|~~접종자아이디~~|백신종류|접종자|백신번호|~~환자아이디~~(외래키)|
 |백신정보 릴레이션|~~입고번호~~|제품종류|사용기간|폐기날짜|~~백신번호~~(외래키)|
+
+### 물리적 스키마   
+감염 테이블   
+감염된환자아이디 VARCHAR(20), 널 값 허용 X, PK,   
+감염자명 VARCHAR(10), 널 값 허용 X   
+감염날짜 DATE, 널 값 허용 X   
+   
+부작용 테이블   
+환자아이디 VARCHAR(20), 널 값 허용 X, PK, FK   
+백신부작용증상 VARCHAR(50), 널 값 허용 X, PK, FK   
+   
+접종기록 테이블   
+접종환자아이디 VARCHAR(20), 널 값 허용 X, PK   
+접종자명 VARCHAR(10), 널 값 허용 X   
+1차접종 VARCHAR(5), 널 값 허용   
+2차접종 VARCHAR(5), 널 값 허용   
+3차접종 VARCHAR(5), 널 값 허용   
+감염전적 VARCHAR(5), 널 값 허용   
+감염된환자아이디 VARCHAR(20), 널 값 허용 X, FK   
+   
+증상 테이블   
+백신부작용증상 VARCHAR(50), 널 값 허용 X, PK   
+   
+백신 테이블   
+접종자아이디 VARCHAR(20), 널 값 허용 X, PK   
+백신종류 VARCHAR(10), 널 값 허용 X   
+접종자 VARCHAR(10), 널 값 허용 X   
+백신번호 INT, 널 값 허용 X    
+환자아이디 VARCHAR(20), 널 값 허용 X, FK   
+   
+환자 테이블   
+환자아이디 VARCHAR(20), 널 값 허용 X, PK   
+환자명 VARCHAR(20), 널 값 허용 X, PK   
+생년월일 DATE   
+나이 INT   
+전화번호 VARCHAR(10), 널 값 허용   
+접종환자아이디 VARCHAR(20), 널 값 허용 X, FK   
+   
+백신정보 테이블   
+입고번호 INT, 널 값 허용 X, PK    
+제품종류 VARCHAR(10), 널 값 허용 X    
+사용기간 DATE     
+폐기날짜 DATE    
+백신번호 INT, 널 값 허용 X, FK    
+    
+5. DB 테이블 생성 스크립트    
+    
+CREATE TABLE 감염 (    
+감염된환자아이디 VARCHAR(20) NOT NULL.    
+감염자명 VARCHAR(10) NOT NULL,    
+감염날짜 DATE     
+PRIMARY KEY(감염된환자아이디)     
+);    
+    
+CREATE TABLE 부작용 (     
+환자아이디 VARCHAR(20) NOT NULL, PK, FK     
+백신부작용증상 VARCHAR(50) NOT NULL, PK, FK    
+PRIMARY KEY(환자아이디, 백신부작용증상),    
+FOREIGN KEY(환자아이디) REFERNECES 환자(환자아이디),     
+FOREIGN KEY(백신부작용증상) REFERENCES 증상(백신부작용증상)     
+);    
+CREATE TABLE 접종기록 (      
+접종환자아이디 VARCHAR(20) NOT NULL,       
+접종자명 VARCHAR(10) NOT NULL,      
+1차접종 VARCHAR(5) NOT NULL,       
+2차접종 VARCHAR(5) NOT NULL,          
+3차접종 VARCHAR(5) NOT NULL,        
+감염전적 VARCHAR(5) NOT NULL,      
+PRIMARY KEY(접종환자아이디),      
+FOREIGN KEY(접종환자아이디) REFERENCES 감염(감염된환자아이디)     
+);    
+       
+CREATE TABLE 증상 (       
+백신부작용증상 VARCHAR(50) NOT NULL,        
+PRIMARY KEY (백신부작용증상)       
+);      
+       
+CREATE TABLE 백신 (       
+접종자아이디 VARCHAR(20) NOT NULL,      
+백신종류 VARCHAR(10) NOT NULL,      
+접종자 VARCHAR(10) NOT NULL,   
+백신번호 INT,     
+환자아이디 VARCHAR(20), NOT NULL,       
+PRIMARY KEY(접종자아이디),       
+FOREIGN KEY(접종자아이디) REFERENCES 환자(환자아이디)         
+);        
+          
+CREATE TABLE 환자 (        
+환자아이디 VARCHAR(20) NOT NULL,          
+환자명 VARCHAR(20) NOT NULL,      
+생년월일 DATE     
+나이 INT      
+전화번호 VARCHAR(10),        
+접종환자아이디 VARCHAR(20), NOT NULL,            
+PRIMARY KEY(환자아이디),          
+FOREIGN KEY(환자아이디) REFERENCES 접종기록(접종환자아이디),             
+CHECK (나이 >= 0)        
+);           
+          
+CREATE TABLE 백신정보 (           
+입고번호 INT,         
+제품종류 VARCHAR(10) NOT NULL,           
+사용기간 DATE,      
+폐기기간 DATE,         
+백신번호 INT,        
+PRIMARY KEY(입고번호),    
+FOREIGN KEY(입고번호) REFERENCES 백신(백신번호)     
+);    
+
