@@ -16,7 +16,7 @@
 * 백신 용액에 대한 정보 제공
 
 ### E-R 다이어그램으로 표현
-![ERdiagram](./e,r,diagram.png)
+![ERdiagram](./E..R..DIAGRAM.png)
 
 ### 키
 * #### 슈퍼키
