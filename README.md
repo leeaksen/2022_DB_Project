@@ -312,7 +312,8 @@ FOREIGN KEY(백신아이디) REFERENCES 백신(백신번호)
 ![GHKS](./GHKS.png) 
 
 ###### 백신정보 릴레이션
-![QORTLS](./QORTLS.png) 
+![QORWJD](./QORWJD.png) 
+![QORWJD2](./QORWJD2.png)
 
 ##### BCNF
 
