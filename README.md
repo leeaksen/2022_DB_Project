@@ -173,7 +173,7 @@ CREATE TABLE __환자__ (
 전화번호 VARCHAR(10),             
 PRIMARY KEY(환자아이디),             
 FOREIGN KEY(환자아이디) REFERENCES 접종기록(접종환자아이디),                
-CHECK (나이 >= 0)           
+CHECK (나이 >= 1)           
 );           
           
 CREATE TABLE __백신정보__ (           
